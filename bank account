@@ -1,0 +1,64 @@
+public class BankAccount {
+
+    protected double balance;
+    private String accountNumber;
+
+    public BankAccount(String accountNumber) {
+        this.balance = 0.0;
+        this.accountNumber = accountNumber;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposit Successful! New balance: $" + balance);
+        } else {
+            System.out.println("Invalid deposit amount. Please enter a positive value.");
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0) {
+            if (balance >= amount) {
+                balance -= amount;
+                System.out.println("Withdrawal Successful! New balance: $" + balance);
+            } else {
+                System.out.println("Insufficient funds for withdrawal.");
+            }
+        } else {
+            System.out.println("Invalid withdrawal amount. Please enter a positive value.");
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+
+class SavingsAccount extends BankAccount {
+
+    public SavingsAccount(String accountNumber) {
+        super(accountNumber);
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        super.withdraw(amount);
+        if (balance < 100) {
+            balance += amount; // Revert withdrawal if balance falls below 100
+            System.out.println("Withdrawal cannot be completed. Minimum balance of $100 required.");
+        }
+    }
+}
+
+
+public static void main(String[] args) {
+        BankAccount bankAccount = new BankAccount("BK12345");
+        SavingsAccount savingsAccount = new SavingsAccount("SV98765");
+        bankAccount.deposit(400.0);
+        bankAccount.withdraw(200.0);
+        savingsAccount.deposit(200.0);
+        savingsAccount.withdraw(150.0);
+        savingsAccount.withdraw(70.0);
+    }
+}
